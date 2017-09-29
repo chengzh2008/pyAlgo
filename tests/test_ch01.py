@@ -5,7 +5,7 @@ import unittest
 
 from src import ch01 as CH01
 
-LOG = logging.getLogger("Ch01TestSuite")
+LOG = logging.getLogger(__name__)
 
 class Ch01TestSuite(unittest.TestCase):
     """Basic test cases."""
@@ -23,6 +23,4 @@ class Ch01TestSuite(unittest.TestCase):
         self.assertEqual(realcount, count, msg='{0}, {1}'.format(realcount, count))
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stderr)
-    logging.getLogger("Ch01TestSuite").setLevel(logging.DEBUG)
     unittest.main()

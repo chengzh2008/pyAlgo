@@ -1,9 +1,11 @@
+"""Testing for ch02"""
+
 import logging
 import unittest
 
-from src.ch02 import Node
+from src.ch02 import Bunch, MTree, Node, Tree
 
-LOG = logging.getLogger("Ch02TestSuite")
+LOG = logging.getLogger(__name__)
 
 class Ch02TestSuite(unittest.TestCase):
     """Basic test cases."""
@@ -17,16 +19,16 @@ class Ch02TestSuite(unittest.TestCase):
         self.assertEqual(realvalue, value, msg='{0}, {1}'.format(realvalue, value))
 
     def test_adjacency_set_graph(self):
-        a,b,c,d,e,f,g,h = range(8)
+        a, b, c, d, e, f, g, h = range(8)
         N = [
-            {b,c,d,e,f}, #a
-            {c,e},
+            {b, c, d, e, f}, #a
+            {c, e},
             {d},
             {e},
             {f},
-            {c,g,h},
-            {f,h},
-            {f,g}
+            {c, g, h},
+            {f, h},
+            {f, g}
         ]
         self.assertEqual(b in N[a], True, msg="{0}, {1}".format("is b in N[a]", b in N[a]))
 
@@ -65,8 +67,26 @@ class Ch02TestSuite(unittest.TestCase):
         degree_node_a = sum(1 for w in W[a] if w < inf and w != 0)
         self.assertEqual(degree_node_a, 5, msg="{0}, {1}".format("degree of node a", degree_node_a))
 
+    def test_tree_list_of_lists(self):
+        T = [["a", "b"], ["c"], ["d", ["e", "f"]]]
+        self.assertEqual(T[0][1], "b", msg="{0}, {1}".format("right child of the left child is", T[0][1]))
+
+    def test_binary_tree(self):
+        T = Tree(None, Tree("c", "d"))
+        self.assertEqual(T.left, None)
+        self.assertEqual(T.right.left, "c")
+
+    def test_multi_way_tree(self):
+        T = MTree(MTree("a", MTree("b", MTree("c", MTree("d")))))
+        self.assertEqual(T.kids.next.next.kids, "c")
+        self.assertEqual(T.kids.next.next.val, "c")
+
+    def test_bunch_pattern(self):
+        b = Bunch(name="abc", address="1st street")
+        self.assertEqual(b.name, "abc")
+        self.assertEqual(b.address, "1st street")
+        self.assertEqual("name" in b, True)
+        self.assertEqual("address" in b, True)
 
 if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stderr)
-    logging.getLogger("Ch02TestSuite").setLevel(logging.DEBUG)
     unittest.main()
