@@ -29,6 +29,28 @@ def cover(board, label=1, top=0, left=0, side=None):
     return label
 
 def print_board(board):
+    """pretty print 2-D array: x downward, y rightward"""
     for row in board:
-        print((" %2i" * 8) % tuple(row))
-    print("#" * 16)
+        print (" %2i" * 8) % tuple(row)
+    print "#" * 16
+
+def ins_sort_rec(seq, i):
+    """insertion sort: recursive"""
+    if not i:
+        return
+    ins_sort_rec(seq, i - 1) # sort i-1 items first
+    j = i
+    # start from j, compare j with j -1 item, swap if not ordered
+    while j > 0 and seq[j-1] > seq[j]:
+        seq[j-1], seq[j] = seq[j], seq[j-1]
+        j -= 1
+    return seq
+
+def ins_sort_iter(seq):
+    """insertion sort: interative"""
+    for i in range(1, len(seq)):
+        j = i
+        while j > 0 and seq[j-1] > seq[j]:
+            seq[j-1], seq[j] = seq[j], seq[j-1]
+            j -= 1
+    return seq
