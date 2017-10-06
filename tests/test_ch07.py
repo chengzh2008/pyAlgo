@@ -8,7 +8,8 @@ from itertools import count
 
 LOG = logging.getLogger(__name__)
 
-def huffman(seq, frq):
+####################################################
+def huffman_trees(seq, frq):
     """huffman encoding, seq, frq are lists"""
     num = count()
     trees = list(zip(frq, num, seq))
@@ -19,9 +20,25 @@ def huffman(seq, frq):
         fb, _, b = heappop(trees)
         n = next(num)
         heappush(trees, (fa + fb, n, [a, b]))
-        LOG.info("trees: {0}".format(trees))
+    return trees[0][-1]
 
-    LOG.info("trees: {0}".format(trees))
+def huffman_codes(tree, prefix=""):
+    """tree is a list of list representing trees"""
+    if len(tree) == 1:
+        yield (tree, prefix)
+        return
+    for bit, child in zip("01", tree):
+        for pair in huffman_codes(child, prefix + bit):
+            yield pair
+
+def huffman_decode(binary, current_tree, root_tree):
+    """TODO: """
+    pass
+
+####################################################
+
+
+
 
 
 
@@ -42,10 +59,15 @@ class Ch07TestSuite(unittest.TestCase):
         self.assertEqual(sum(payed), 5632)
         self.assertEqual(payed, result)
 
-    def test_huffman(self):
+    def test_huffman_trees(self):
         seq = "abcdefghi"
         frq = [4, 5, 6, 9, 11, 12, 15, 16, 20]
-        self.assertEqual(huffman(seq, frq), "a")
+        result_trees = [['i', [['a', 'b'], 'e']], [['f', 'g'], [['c', 'd'], 'h']]]
+        self.assertEqual(huffman_trees(seq, frq), result_trees)
+        result_char_map = dict(huffman_codes(result_trees))
+        self.assertEqual(result_char_map['a'], '0100')
+        self.assertEqual(result_char_map['b'], '0101')
+
 
 
 if __name__ == '__main__':
