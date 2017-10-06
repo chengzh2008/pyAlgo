@@ -6,7 +6,8 @@ import unittest
 from bisect import bisect, bisect_left
 from copy import deepcopy
 
-from src.ch06 import bisect_right_1, divide_and_conquer
+from src.ch06 import bisect_right_1, divide_and_conquer, quick_sort_in_place
+from src.ch06_tree import Tree
 
 LOG = logging.getLogger(__name__)
 
@@ -33,6 +34,20 @@ class Ch06TestSuite(unittest.TestCase):
         vals = [v for (k, v) in dec]
         print dec, keys, vals
         self.assertEqual(vals[bisect_left(keys, 3)], 'aim')
+
+    def test_tree(self):
+        tree = Tree()
+        tree['a'] = 42
+        self.assertEqual(tree['a'], 42)
+        self.assertEqual('b' in tree, False)
+
+    def test_quick_sort_in_place(self):
+        seq = [random.randrange(1000) for i in range(100)]
+        seq1 = deepcopy(seq)
+        quick_sort_in_place(seq1)
+        self.assertEqual(sorted(seq), seq1)
+
+
 
 if __name__ == '__main__':
     unittest.main()
