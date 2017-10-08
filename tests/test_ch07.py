@@ -36,7 +36,68 @@ def huffman_decode(binary, current_tree, root_tree):
     pass
 
 ####################################################
+"""Naive implementation of Kruskall algorithm"""
+def naive_find(C, u):
+    while C[u] != u: # search the representative
+        u = C[u]
+    return u
 
+def naive_union(C, u, v):
+    u = naive_find(C, u)
+    v = naive_find(C, v) # make v as the representative
+    C[u] = v
+
+def naive_kruskal(G):
+    E = [(G[u][v], u, v) for u in G for v in G[u]]
+    T = set()
+    C = {u:u for u in G}
+    for _, u, v in sorted(E):
+        if naive_find(C, u) != naive_find(C, v):
+            T.add(u, v)
+            naive_union(C, u, v)
+    return T
+####################################################
+"""Improved Kruskall algorithm
+the running time is Theta(mlgn):
+"""
+def find(C, u):
+    if C[u] != u:
+        C[u] = find(C, C[u]) # path compression, a little bit mind bending
+    return C[u]
+
+def union(C, R, u, v):
+    u = find(C, u)
+    v = find(C, v)
+    if R[u] > R[v]: # union  by rank
+        C[v] = u
+    else:
+        C[u] = v
+    if R[u] == R[v]:
+        R[v] += 1
+
+def kruska(G):
+    E = [(G[u][v], u, v) for u in G for v in G[u]]
+    T = set()
+    C, R = {u:u for u in G}, {u:0 for u in G}
+    for _, u, v in sorted(E):
+        if find(C, u) != find(C, v):
+            T.add(u, v)
+            union(C, R, u, v)
+    return T
+
+#######################################################
+"""Prim's algorithm"""
+def prim(G, s):
+    """here to do list is a priority queue based on weight"""
+    P, Q = {}, [(0, None, s)] # here 0 is the waight, None here is the predecessor of s
+    while Q:
+        _, p, u = heappop(Q)
+        if u in P:
+            continue
+        P[u] = p
+        for v, w in G[u].items():
+            heappush(Q, (w, u, v)) # hereu is predecessor of v
+    return P
 
 
 
