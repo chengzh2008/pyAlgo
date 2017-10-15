@@ -4,6 +4,7 @@ import logging
 import unittest
 
 from src.ch02 import Bunch, MTree, Node, Tree
+from util.data import W_G, G
 
 LOG = logging.getLogger(__name__)
 
@@ -19,31 +20,13 @@ class Ch02TestSuite(unittest.TestCase):
         self.assertEqual(realvalue, value, msg='{0}, {1}'.format(realvalue, value))
 
     def test_adjacency_set_graph(self):
-        a, b, c, d, e, f, g, h = range(8)
-        N = [
-            {b, c, d, e, f}, #a
-            {c, e},
-            {d},
-            {e},
-            {f},
-            {c, g, h},
-            {f, h},
-            {f, g}
-        ]
+        N = G
+        a, b = 0, 1
         self.assertEqual(b in N[a], True, msg="{0}, {1}".format("is b in N[a]", b in N[a]))
 
     def test_adjacency_dict_graph(self):
-        a, b, c, d, e, f, g, h = range(8)
-        N = [
-            {b:2, c:1, d:3, e:9, f:4},    # a
-            {c:4, e:3},                   # b
-            {d:8},                        # c
-            {e:7},                        # d
-            {f:5},                        # e
-            {c:2, g:2, h:2},              # f
-            {f:1, h:6},                   # g
-            {f:9, g:8}                    # h
-        ]
+        N = W_G
+        a, b = 0, 1
         self.assertEqual(N[a][b], 2, msg="{0}, {1}".format("weight of edge a b", N[a][b]))
 
     def test_weight_matrix_graph(self):
